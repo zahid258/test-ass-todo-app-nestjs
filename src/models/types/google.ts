@@ -1,0 +1,1 @@
+export type GoogleUrlAction = "login"|"signup"|"add-app";
