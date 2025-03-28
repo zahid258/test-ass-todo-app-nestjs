@@ -43,7 +43,7 @@ export class UserController {
         @Param('id') id: string,
         @Body() userRequest: IUserRequest,
         @CurrentUser() user
-    ) {
+    ) { 
         return await this.userService.update(id, userRequest, user);
     }
 }

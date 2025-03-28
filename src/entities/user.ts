@@ -7,7 +7,7 @@ import { AccountEntityBase } from "./base-entities/account-entity-base";
 @Entity('User')
 export class User extends AccountEntityBase implements IToResponseBase<User, IUserResponse> {
 
-    @Column({ unique: true, type: 'text' })
+    @Column({ unique: true, type: 'text', })
     userName!: string;
 
     @Column({ type: 'text', unique: true })

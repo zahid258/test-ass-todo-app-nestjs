@@ -23,11 +23,10 @@ export class UserService extends Service<User, IUserResponse, IUserRequest>   {
     async login(loginRequest: ILoginRequest): Promise<IUserResponse & {token: string}> {
         let user = await this.userRepository.getOneByQuery({filters:[{field: 'userName', value: loginRequest.userName, operator: FilterOperators.Or, matchMode: FilterMatchModes.Equal}, {field: 'email', value: loginRequest.userName, operator: FilterOperators.Or, matchMode: FilterMatchModes.Equal, ignoreCase: true}], relations: {account: true}});
         let error: any = {code: '401', message: 'Invalid username or password', name: 'Unauthorized'};
-
-        if (!user) throw new NotFoundException('Invalid username or password',  error);
         
+        if (!user) throw new NotFoundException('Invalid username or password',  error);
+  
         let match = await compareHash(loginRequest.password, user.passwordHash ?? "");
-
         if (match) {
             await this.userRepository.partialUpdate(user.id, {lastLogin: new Date()});
             return {...user.toResponse(user), token: await this.jwtService.signAsync({id: user.id, name: `${user.firstName} ${user.lastName}`, accountId: user.accountId},{secret: process.env.JWT_SECRET})};
